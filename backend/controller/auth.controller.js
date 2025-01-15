@@ -1,4 +1,4 @@
-import User  from "../models/user.model.js";
+import User  from "../model/user.model.js";
 import bcryptjs from "bcryptjs";
 // import { generateTokenAndSetCookie } from "../utils/generateToken.js";
 
@@ -73,3 +73,47 @@ export const signup= async(req, res) =>{
     //         res.status(500).json({ success: false, message: "Internal server error" });
     //     }
     // }
+
+
+    export const login = async (req, res) => {
+        try{
+            const {email,password}=req.body;
+
+            if(!email || !password){
+                return res.status(400).json({success:false,message:"All fields are required"})
+            }
+
+            const user=await User.findone({email:email})
+
+            if(!user){
+                res.status(400).json({success:false,message:"invalid credentials"})
+                //if use tries to login with invalid details
+            }
+            await user.save();
+            res.status(200).json({success:true,user})
+
+      }
+      catch(error){
+        console.log("error in login controoler", error.message)
+        res.status(500).json({success:false,message:"server error"})
+
+      }
+
+
+    }
+
+    export const logout= async(req,res)=>{
+        try{
+            res.clearcookie("")
+            res.status(200).json({successLtrue,,message:"logout success"})
+
+        }
+        catch(error){
+            console.log("error in logout controlller", error.message)
+            res.status(500).json({success:false,message:"server error"})
+        }
+
+
+
+
+    }
