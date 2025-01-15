@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import {ENV_VARS} from "./config/envVar.js";
 // import path from "path";
 
 import authRoutes from "./routes/auth.route.js";
@@ -10,12 +11,12 @@ import authRoutes from "./routes/auth.route.js";
 // import paymentRoutes from "./routes/payment.route.js";
 // import analyticsRoutes from "./routes/analytics.route.js";
 
-import { connectDB } from "./lib/db.js";
+import { connectDB } from "./config/db.js";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = ENV_VARS.PORT || 5000;
 
 // const __dirname = path.resolve();
 
@@ -23,6 +24,7 @@ app.use(express.json({ limit: "10mb" })); // allows you to parse the body of the
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+console.log("MONGO_URI:"+ ENV_VARS.MONGO_URI)
 // app.use("/api/products", productRoutes);
 // app.use("/api/cart", cartRoutes);
 // app.use("/api/coupons", couponRoutes);
