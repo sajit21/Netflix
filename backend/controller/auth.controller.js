@@ -98,22 +98,17 @@ export const signup= async(req, res) =>{
         res.status(500).json({success:false,message:"server error"})
 
       }
-
-
     }
 
+    
     export const logout= async(req,res)=>{
         try{
             res.clearcookie("")
-            res.status(200).json({successLtrue,,message:"logout success"})
+            res.status(200).json({successLtrue,message:"logout success"})
 
         }
         catch(error){
             console.log("error in logout controlller", error.message)
             res.status(500).json({success:false,message:"server error"})
         }
-
-
-
-
     }
