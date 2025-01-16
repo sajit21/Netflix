@@ -43,3 +43,16 @@ app.listen(PORT, () => {
 	console.log("Server is running on http://localhost:" + PORT);
 	connectDB();
 });
+
+const options = {
+	method: 'GET',
+	headers: {
+	  accept: 'application/json',
+	  Authorization: 'Bearer' + ENV_VARS.TMDB_API_KEY
+	}
+  };
+  
+  fetch('https://api.themoviedb.org/3/account/21755895/watchlist/movies?language=en-US&page=1&sort_by=created_at.asc', options)
+	.then(res => res.json())
+	.then(res => console.log(res))
+	.catch(err => console.error(err));

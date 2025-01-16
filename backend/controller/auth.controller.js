@@ -1,8 +1,8 @@
-import User  from "../model/user.model.js";
+import  User  from "../model/user.model.js";
 import bcryptjs from "bcryptjs";
-// import { generateTokenAndSetCookie } from "../utils/generateToken.js";
+import { generateTokenAndSetCookie } from "../utils/generateToken.js";
 
-export const signup= async(req, res) =>{
+export async function signup(req, res) {
 	try {
 		const { email, password, username } = req.body;
 
@@ -38,8 +38,7 @@ export const signup= async(req, res) =>{
 		const PROFILE_PICS = ["/avatar1.png", "/avatar2.png", "/avatar3.png"];
 
 		const image = PROFILE_PICS[Math.floor(Math.random() * PROFILE_PICS.length)];
-     //paila chai math.random le 0 to 1 ko value dinxa ani teslai multiply garera 0 to 2 ko value dinxa 
-     // ani math.floor le teslai 0 or 1 ma convert garcha
+
 		const newUser = new User({
 			email,
 			password: hashedPassword,
@@ -47,7 +46,7 @@ export const signup= async(req, res) =>{
 			image,
 		});
 
-		// generateTokenAndSetCookie(newUser._id, res);
+		generateTokenAndSetCookie(newUser._id, res);
 		await newUser.save();
 
 		res.status(201).json({
@@ -63,52 +62,56 @@ export const signup= async(req, res) =>{
 	}
 }
 
+export async function login(req, res) {
+	try {
+		const { email, password } = req.body;
 
-    // export async function authCheck(req, res) {
-    //     try {
-    //         console.log("req.user:", req.user);
-    //         res.status(200).json({ success: true, user: req.user });
-    //     } catch (error) {
-    //         console.log("Error in authCheck controller", error.message);
-    //         res.status(500).json({ success: false, message: "Internal server error" });
-    //     }
-    // }
+		if (!email || !password) {
+			return res.status(400).json({ success: false, message: "All fields are required" });
+		}
 
+		const user = await User.findOne({ email: email });
+		if (!user) {
+			return res.status(404).json({ success: false, message: "Invalid credentials" });
+		}
 
-    export const login = async (req, res) => {
-        try{
-            const {email,password}=req.body;
+		const isPasswordCorrect = await bcryptjs.compare(password, user.password);
 
-            if(!email || !password){
-                return res.status(400).json({success:false,message:"All fields are required"})
-            }
+		if (!isPasswordCorrect) {
+			return res.status(400).json({ success: false, message: "Invalid credentials" });
+		}
 
-            const user=await User.findone({email:email})
+		generateTokenAndSetCookie(user._id, res);
 
-            if(!user){
-                res.status(400).json({success:false,message:"invalid credentials"})
-                //if use tries to login with invalid details
-            }
-            await user.save();
-            res.status(200).json({success:true,user})
+		res.status(200).json({
+			success: true,
+			user: {
+				...user._doc,
+				password: "",
+			},
+		});
+	} catch (error) {
+		console.log("Error in login controller", error.message);
+		res.status(500).json({ success: false, message: "Internal server error" });
+	}
+}
 
-      }
-      catch(error){
-        console.log("error in login controoler", error.message)
-        res.status(500).json({success:false,message:"server error"})
+export async function logout(req, res) {
+	try {
+		res.clearCookie("jwt-netflix");
+		res.status(200).json({ success: true, message: "Logged out successfully" });
+	} catch (error) {
+		console.log("Error in logout controller", error.message);
+		res.status(500).json({ success: false, message: "Internal server error" });
+	}
+}
 
-      }
-    }
-
-    
-    export const logout= async(req,res)=>{
-        try{
-            res.clearcookie("")
-            res.status(200).json({successLtrue,message:"logout success"})
-
-        }
-        catch(error){
-            console.log("error in logout controlller", error.message)
-            res.status(500).json({success:false,message:"server error"})
-        }
-    }
+// export async function authCheck(req, res) {
+// 	try {
+// 		console.log("req.user:", req.user);
+// 		res.status(200).json({ success: true, user: req.user });
+// 	} catch (error) {
+// 		console.log("Error in authCheck controller", error.message);
+// 		res.status(500).json({ success: false, message: "Internal server error" });
+// 	}
+// }
