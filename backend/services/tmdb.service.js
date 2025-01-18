@@ -1,7 +1,7 @@
 import axios from "axios";
-import { ENV_VARS } from "../config/envVar";
+import { ENV_VARS } from "../config/envVar.js";
 
-export const getTMDBDATA= async(url)=>{
+export const fetchFromTMDB= async(url)=>{
     const options = {
         headers: {
           accept: 'application/json',
@@ -11,7 +11,7 @@ export const getTMDBDATA= async(url)=>{
 
 
       const response= await axios.get(url,options);
-      if(response !== 200)
+      if(response.status !== 200)
       {
         throw new Error("Error in fetching data from TMDB" + response.statusText);
       }
