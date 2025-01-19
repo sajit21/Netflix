@@ -7,6 +7,8 @@ import authRoutes from "./routes/auth.route.js";
 import movieRoutes from "./routes/movie.route.js";
 import tvRoutes from "./routes/tv.route.js";	
 import { connectDB } from "./config/db.js";
+import { protectroute } from "./middleware/protectroute.js";
+import searchRoutes from "./routes/search.route.js";
 
 dotenv.config();
 
@@ -19,8 +21,10 @@ app.use(express.json({ limit: "10mb" })); // allows you to parse the body of the
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/movies", movieRoutes);
-app.use("/api/tv", tvRoutes);
+app.use("/api/movies",protectroute, movieRoutes);
+app.use("/api/tv",protectroute, tvRoutes);
+app.use("/api/search",protectroute, searchRoutes);
+
 
 
 
