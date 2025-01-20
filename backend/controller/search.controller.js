@@ -1,5 +1,7 @@
 import { fetchFromTMDB } from "../services/tmdb.service.js";
 import User from "../model/user.model.js";
+
+
 export const searchPerson = async(req ,res ) => {
     const {query}=req.params;
 
@@ -12,7 +14,7 @@ export const searchPerson = async(req ,res ) => {
       }
       res.status(200).json({success:true, content:data.results})
 
-      await User.findByIdandUpdate(req.user._id, { $push: { searchHistory: 
+      await User.findByIdAndUpdate(req.user._id, { $push: { searchHistory: 
         {
             id:data.results[0].id,
             profile:data.results[0].profile_path,
@@ -43,7 +45,7 @@ try{
     }
     res.status(200).json({success:true, content :data.results})
 
-    await User.findByIdandUpdate(req.user._id, { $push: { searchHistory: 
+    await User.findByIdAndUpdate(req.user._id, { $push: { searchHistory: 
         {
             id:data.results[0].id,
             profile:data.results[0].profile_path,
@@ -91,4 +93,17 @@ catch(error)
 }
 
 
+}
+
+export const searchHistory = async(req, res) => {
+try{
+    res.status(200).json({success:true, content:req.user.searchHistory}) //req.user is the user object that we get from the middleware
+   
+}
+
+catch(error){
+res.status(500).json({success:false, message: "internal server error"})
+
+
+}
 }
