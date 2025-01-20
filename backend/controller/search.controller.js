@@ -1,6 +1,6 @@
 import { fetchFromTMDB } from "../services/tmdb.service.js";
 import User from "../model/user.model.js";
-
+// import { praseInt }  from "dotenv";
 
 export const searchPerson = async(req ,res ) => {
     const {query}=req.params;
@@ -106,4 +106,30 @@ res.status(500).json({success:false, message: "internal server error"})
 
 
 }
+}
+
+
+export const removeSearchHistory = async(req, res) => {
+    let  {id}=req.params;
+	id = parseInt(id);
+     try{
+        await User.findByIdAndUpdate(req.user._id,{$pull:
+            {
+                searchHistory:{id:id}
+
+            }}
+        )
+        res.status(200).json({ success: true, message: "Item removed from search history" });
+
+
+     }
+     catch(error)
+     {
+         console.log("error in removeItemFromSearchHistory controller:", error.message)
+         res.status(500).json({success:false, message: "internal server error"})
+     }
+
+
+
+
 }
