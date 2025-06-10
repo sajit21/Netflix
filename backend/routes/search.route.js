@@ -9,7 +9,7 @@ router.get("/movie/:query",searchMovie);
 
 router.get("/tv/:query",searchTv);
 router.get("/history",searchHistory);
-router.get("/remove/:id",removeSearchHistory);
+router.delete("/remove/:id",removeSearchHistory);
 
 
 
