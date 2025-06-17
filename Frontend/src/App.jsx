@@ -5,6 +5,7 @@ import Auth from './pages/Home/Auth'
 import Home from './pages/Home/Home'
 import LoginPage from './pages/LoginPage'
 import {Routes,Route} from "react-router-dom"
+import Footer from './components/Footer'
 const App = () => {
   return (
     <div className='max-w-screen-2xl  w-full  '>
@@ -17,6 +18,7 @@ const App = () => {
 
 
       </Routes>
+      <Footer/>
       
        </div>
   )

@@ -8,6 +8,7 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    navigation("/signup?Email="+Email)
   };
   return (
     <div className="hero-bg w-full relative ">
