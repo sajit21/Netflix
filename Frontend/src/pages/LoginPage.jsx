@@ -1,15 +1,17 @@
 import { React, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuthStore } from "../store/useAuth";
 
 const LoginPage = () => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
+  const {login}=useAuthStore();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log({
+    login({
       email: Email,
-      password: Password,
+     password: Password,
     });
   };
 

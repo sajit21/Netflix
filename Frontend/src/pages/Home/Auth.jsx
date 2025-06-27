@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronRight, Truck } from "lucide-react";
+import { useAuthStore } from "../../store/useAuth";
 
 const Auth = () => {
   const [Email, setEmail] = useState("");
   const navigation = useNavigate();
+
 
   const handleSubmit = (e) => {
     e.preventDefault();

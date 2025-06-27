@@ -6,7 +6,16 @@ import Home from './pages/Home/Home'
 import LoginPage from './pages/LoginPage'
 import {Routes,Route} from "react-router-dom"
 import Footer from './components/Footer'
+import { Toaster } from 'react-hot-toast'
+import { useAuthStore } from './store/useAuth'
+import { useEffect } from 'react'
 const App = () => {
+
+  const {user,isCheckingAuth,authCheck}=useAuthStore();
+
+  useEffect(()=>{
+    authCheck()
+  },[])
   return (
     <div className='max-w-screen-2xl  w-full  '>
       <Routes>
@@ -18,6 +27,7 @@ const App = () => {
 
 
       </Routes>
+      <Toaster/>
       <Footer/>
       
        </div>
