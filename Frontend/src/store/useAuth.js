@@ -5,7 +5,9 @@ import { create } from "zustand";
 export const useAuthStore = create((set) => ({
   user: null,
   isSigningup: false,
+  islogginIn:false,
   isCheckingAuth:true,
+  isLoggingOut:false,
   signup: async (Credential) => {
     set({ isSigningup: true });
     try {
@@ -17,19 +19,31 @@ export const useAuthStore = create((set) => ({
     set({isSigningup:false,user:null})       
     }
   },
-  // login:async(Credential)=>{
-  //   set({isSigninup:false})
-  //   try {
-  //     const response=await axios("/api/auth/login",Credential)
-  //     set({user:response.data.user,isSigningup:true})
-  //     toast("account logged in successfully")
+  login:async(Credential)=>{
+    set({islogginIn:true})
+    try {
+    const response=await axios.post("/api/auth/login",Credential)
+   set({user:response.data.user, islogginIn:false})
+   toast.success("logged in successfully")
+    } catch (error) {
+      set({islogginIn:false,user:null})
+      toast.error(error.response.data.message || "loggin failed")
       
-  //   } catch (error) {
-  //     toast.error(error?.response?.data?.message || "an error  occured")
-  //     set({user:null,isSigningup:false})
-      
-  //   }
-  // }
+    }
+  },
+  
+  logout:async()=>{
+    set({isLoggingOut:true})
+         try {
+          await axios.options("/api/auth/logout")
+          set({user:null,isLoggingOut:false})
+          toast.success("logged out successfully")
+         } catch (error) {
+          set({isLoggingOut:false})
+          toast.error(error.response.data.message || "Logout failed")
+          
+         }
+  },
   authCheck:async()=>{
     set({isCheckingAuth:true})
     try {
